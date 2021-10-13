@@ -1,9 +1,9 @@
 # ~/.workspace_bgs
 
-bg=/home/$USER/Pictures/Desktop/Beach2-1920x1080-1.jpg
+bg=/home/$USER/Pictures/Desktop/default.jpg
 
-bg1=/home/$USER/Pictures/Desktop/IMG_0614.jpg
-bg2=/home/$USER/Pictures/Desktop/IMG_3643-2.jpg
+bg1=/home/$USER/Pictures/Desktop/IMG_01.jpg
+bg2=/home/$USER/Pictures/Desktop/IMG_02.jpg
 bg3=
 
 #Up to bg9 is supported
