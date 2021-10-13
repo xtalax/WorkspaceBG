@@ -1,7 +1,0 @@
-[Desktop Entry]
-Exec=/home/$USER/.local/bin/workspacebg
-Icon=dialog-scripts
-Name=workspacebg
-Path=
-Type=Application
-X-KDE-AutostartScript=true
