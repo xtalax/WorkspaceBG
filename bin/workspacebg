@@ -44,28 +44,18 @@ function switchbg () {
     esac
 }
 
-#make sure that only one instance of this script is running per user
-lockfile=/tmp/.wchg.$USER.lockfile
-if ( set -o noclobber; echo "locked" > "$lockfile") 2> /dev/null; then
-   #trap 'rm -f "$lockfile"; exit $?' INT TERM EXIT
-   echo "wsp_notifyDEBUG: Locking succeeded" >&2
+CURRENT_WORKSPACE=$(wmctrl -d | grep \* | cut -d' ' -f1)
+while true
+do
+    sleep 1
+    NEW_WORKSPACE=$(wmctrl -d | grep \* | cut -d' ' -f1)
+    if [ $CURRENT_WORKSPACE -ne $NEW_WORKSPACE ]; then 
+        echo "A workspace change has occurred. $CURRENT_WORKSPACE -> $NEW_WORKSPACE"
+        CURRENT_WORKSPACE=$NEW_WORKSPACE
+        switchbg $CURRENT_WORKSPACE             
+    fi
+done
 
-   CURRENT_WORKSPACE=$(wmctrl -d | grep \* | cut -d' ' -f1)
-   while true
-   do
-      sleep 1
-      NEW_WORKSPACE=$(wmctrl -d | grep \* | cut -d' ' -f1)
-      if [ $CURRENT_WORKSPACE -ne $NEW_WORKSPACE ]; then 
-         echo "A workspace change has occurred. $CURRENT_WORKSPACE -> $NEW_WORKSPACE"
-         CURRENT_WORKSPACE=$NEW_WORKSPACE
-         switchbg $CURRENT_WORKSPACE             
-      fi
-   done
-
-# can't create lockfile - notify user and quit
-else
-   echo "wsp_notifyDEBUG: Lock failed, check for existing process and/or lock file and delete ($lockfile)- exiting." >&2
-   exit 1
 fi			
 
 exit 0
