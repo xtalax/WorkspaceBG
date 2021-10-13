@@ -1,0 +1,71 @@
+#!/bin/bash
+
+function switchbg () {
+#import $bg paths from file
+    if test -f ~/.workspace_bgs; then
+        . ~/.workspace_bgs
+    else
+        echo "Please create a file .workspace_bgs in the home directory of the form:\nbg=/path/to/defaultbg\nbg1=/path/to/bg1\nbg2=/path/to/bg2\netc..."
+        rm $lockfile
+        exit 1
+    fi
+    case $1 in
+      
+        0)
+            test -f $bg1 && setbg $bg1
+            ;;
+        1)
+            test -f $bg2 && setbg $bg2
+            ;;
+        2)
+            test -f $bg3 && setbg $bg3
+            ;;
+        3)
+            test -f $bg4 && setbg $bg4
+            ;;
+        4)
+            test -f $bg5 && setbg $bg5
+            ;;
+        5)
+            test -f $bg6 && setbg $bg6
+            ;;
+        6)
+            test -f $bg7 && setbg $bg7
+            ;;
+        7)
+            test -f $bg8 && setbg $bg8
+            ;;
+        8)
+            test -f $bg9 && setbg $bg9
+            ;;
+        *)
+            test -f $bg && setbg $bg
+            ;;
+    esac
+}
+
+#make sure that only one instance of this script is running per user
+lockfile=/tmp/.wchg.$USER.lockfile
+if ( set -o noclobber; echo "locked" > "$lockfile") 2> /dev/null; then
+   #trap 'rm -f "$lockfile"; exit $?' INT TERM EXIT
+   echo "wsp_notifyDEBUG: Locking succeeded" >&2
+
+   CURRENT_WORKSPACE=$(wmctrl -d | grep \* | cut -d' ' -f1)
+   while true
+   do
+      sleep 1
+      NEW_WORKSPACE=$(wmctrl -d | grep \* | cut -d' ' -f1)
+      if [ $CURRENT_WORKSPACE -ne $NEW_WORKSPACE ]; then 
+         echo "A workspace change has occurred. $CURRENT_WORKSPACE -> $NEW_WORKSPACE"
+         CURRENT_WORKSPACE=$NEW_WORKSPACE
+         switchbg $CURRENT_WORKSPACE             
+      fi
+   done
+
+# can't create lockfile - notify user and quit
+else
+   echo "wsp_notifyDEBUG: Lock failed, check for existing process and/or lock file and delete ($lockfile)- exiting." >&2
+   exit 1
+fi			
+
+exit 0
